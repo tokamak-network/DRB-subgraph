@@ -1,0 +1,41 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CRRNGCoordinatorPoFV2ForTitan
+    network: titan-sepolia
+    source:
+      address: "0x09046Cad6e5AcC033Dfd522cd8136F4fF246bACf"
+      abi: CRRNGCoordinatorPoFV2ForTitan
+      startBlock: 907
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CommitC
+        - FulfillRandomness
+        - OperatorNumberChanged
+        - OwnershipTransferred
+        - RandomWordsRequested
+        - Recovered
+      abis:
+        - name: CRRNGCoordinatorPoFV2ForTitan
+          file: ./abis/CRRNGCoordinatorPoFV2ForTitan.json
+      eventHandlers:
+        - event: CommitC(uint256,uint256,address,bytes)
+          handler: handleCommitC
+        - event: FulfillRandomness(uint256,bool,address)
+          handler: handleFulfillRandomness
+        - event: OperatorNumberChanged(uint256,address,bool)
+          handler: handleOperatorNumberChanged
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RandomWordsRequested(uint256)
+          handler: handleRandomWordsRequested
+        - event: Recovered(uint256,address,bytes)
+          handler: handleRecovered
+      file: ./src/crrng-coordinator-po-fv-2.ts
