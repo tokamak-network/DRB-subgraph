@@ -1,0 +1,66 @@
+type RoundInfo @entity(immutable: false) {
+  id: String! # uint256
+  round: BigInt! # uint256
+  commitCount: BigInt! # uint256
+  invalidCommitCount: BigInt! # uint256
+  validCommitCount: BigInt! # uint256, commitCount - invalidCommitCount
+  isRecovered: Boolean! # bool
+  isFulfillExecuted: Boolean! # bool
+  isFulfillSucceeded: Boolean! # bool
+  randomWordsRequesteds: [RandomWordsRequested!] @derivedFrom(field: "roundInfo")
+  commitCs: [CommitC!] @derivedFrom(field: "roundInfo")
+  recovereds: [Recovered!] @derivedFrom(field: "roundInfo")
+  fulfillRandomnesses: [FulfillRandomness!] @derivedFrom(field: "roundInfo")
+}
+
+type CommitC @entity(immutable: false) {
+  id: Bytes!
+  round: BigInt! # uint256
+  commitIndex: BigInt! # uint256
+  msgSender: Bytes! # address
+  commitVal: Bytes! # bytes
+  blockTimestamp: BigInt!
+  roundInfo: RoundInfo!
+}
+
+type FulfillRandomness @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  success: Boolean! # bool
+  msgSender: Bytes! # address
+  blockTimestamp: BigInt!
+  roundInfo: RoundInfo!
+}
+
+type OperatorNumberChanged @entity(immutable: true) {
+  id: Bytes!
+  operatorCount: BigInt! # uint256
+  operator: Bytes! # address
+  isOperator: Boolean! # bool
+  blockTimestamp: BigInt!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RandomWordsRequested @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  blockTimestamp: BigInt!
+  roundInfo: RoundInfo!
+}
+
+type Recovered @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  msgSender: Bytes! # address
+  omega: Bytes! # bytes
+  blockTimestamp: BigInt!
+  roundInfo: RoundInfo!
+}
