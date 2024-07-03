@@ -5,12 +5,12 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: CRRNGCoordinatorPoFV2ForTitan
+    name: CRRNGCoordinatorPoFForTitan
     network: titan-sepolia
     source:
-      address: "0x09046Cad6e5AcC033Dfd522cd8136F4fF246bACf"
-      abi: CRRNGCoordinatorPoFV2ForTitan
-      startBlock: 907
+      address: "0x86E68f452fbE15b6F36688a96041b706467e6E1D"
+      abi: CRRNGCoordinatorPoFForTitan
+      startBlock: 1550
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,8 +23,8 @@ dataSources:
         - RandomWordsRequested
         - Recovered
       abis:
-        - name: CRRNGCoordinatorPoFV2ForTitan
-          file: ./abis/CRRNGCoordinatorPoFV2ForTitan.json
+        - name: CRRNGCoordinatorPoFForTitan
+          file: ./abis/CRRNGCoordinatorPoFForTitan.json
       eventHandlers:
         - event: CommitC(uint256,uint256,address,bytes)
           handler: handleCommitC
