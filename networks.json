@@ -1,8 +1,8 @@
 {
-  "optimism-sepolia": {
-    "CRRNGCoordinatorPoFV2": {
-      "address": "0x4747Fbd69463bc68fEd8e7D67133fcB4145a0a2D",
-      "startBlock": 13693616
+  "sepolia": {
+    "DRBCoordinator": {
+      "address": "0x604f58e4b88fc76e042c6aa4e057c786700d37dc",
+      "startBlock": 6670874
     }
   }
 }

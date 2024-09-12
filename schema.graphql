@@ -1,43 +1,50 @@
 type RoundInfo @entity(immutable: false) {
-  id: String! # uint256
+  id: String!
   round: BigInt! # uint256
   commitCount: BigInt! # uint256
-  invalidCommitCount: BigInt! # uint256
-  validCommitCount: BigInt! # uint256, commitCount - invalidCommitCount
-  isRecovered: Boolean! # bool
-  isFulfillExecuted: Boolean! # bool
-  isFulfillSucceeded: Boolean! # bool
-  randomWordsRequesteds: [RandomWordsRequested!] @derivedFrom(field: "roundInfo")
-  commitCs: [CommitC!] @derivedFrom(field: "roundInfo")
-  recovereds: [Recovered!] @derivedFrom(field: "roundInfo")
-  fulfillRandomnesses: [FulfillRandomness!] @derivedFrom(field: "roundInfo")
+  revealCount: BigInt! # uint256
+  requestedTimestamp: BigInt! # uint256
+  isRefunded: Boolean!
 }
 
-type CommitC @entity(immutable: false) {
-  id: Bytes!
-  round: BigInt! # uint256
-  commitIndex: BigInt! # uint256
-  msgSender: Bytes! # address
-  commitVal: Bytes! # bytes
-  blockTimestamp: BigInt!
-  roundInfo: RoundInfo!
+type ActivatedOperators @entity(immutable: false) {
+  id: String!
+  operators: [Bytes!]! # address[]
+  operatorsCount: BigInt! # uint256
 }
 
-type FulfillRandomness @entity(immutable: true) {
+type Activated @entity(immutable: true) {
   id: Bytes!
-  round: BigInt! # uint256
-  success: Boolean! # bool
-  msgSender: Bytes! # address
-  blockTimestamp: BigInt!
-  roundInfo: RoundInfo!
-}
-
-type OperatorNumberChanged @entity(immutable: true) {
-  id: Bytes!
-  operatorCount: BigInt! # uint256
   operator: Bytes! # address
-  isOperator: Boolean! # bool
+  blockNumber: BigInt!
   blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Commit @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  round: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DeActivated @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type L1FeeCalculationSet @entity(immutable: true) {
+  id: Bytes!
+  mode: Int! # uint8
+  coefficient: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
 type OwnershipTransferred @entity(immutable: true) {
@@ -49,18 +56,28 @@ type OwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type RandomWordsRequested @entity(immutable: true) {
+type RandomNumberRequested @entity(immutable: true) {
   id: Bytes!
   round: BigInt! # uint256
+  activatedOperators: [Bytes!]! # address[]
+  blockNumber: BigInt!
   blockTimestamp: BigInt!
-  roundInfo: RoundInfo!
+  transactionHash: Bytes!
 }
 
-type Recovered @entity(immutable: true) {
+type Refund @entity(immutable: true) {
   id: Bytes!
   round: BigInt! # uint256
-  msgSender: Bytes! # address
-  omega: Bytes! # bytes
+  blockNumber: BigInt!
   blockTimestamp: BigInt!
-  roundInfo: RoundInfo!
+  transactionHash: Bytes!
+}
+
+type Reveal @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  round: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
