@@ -1,4 +1,4 @@
-specVersion: 1.0.0
+specVersion: 0.0.7
 indexerHints:
   prune: auto
 schema:
@@ -8,9 +8,9 @@ dataSources:
     name: CRRNGCoordinatorPoFForTitan
     network: titan-sepolia
     source:
-      address: "0x86E68f452fbE15b6F36688a96041b706467e6E1D"
+      address: "0x4015e2c6263188D176fD14F324627d8DeEECe4cf"
       abi: CRRNGCoordinatorPoFForTitan
-      startBlock: 1550
+      startBlock: 3190
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
