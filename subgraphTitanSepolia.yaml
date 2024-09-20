@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: DRBCoordinator
-    network: thanos
+    network: titan-sepolia
     source:
-      address: "0xA2aF457c38323d2f8C6199AEc6B6D82B35f9262E"
+      address: "0xb8A9e7279b7f134736668bE3394CDAe5DFaD9e62"
       abi: DRBCoordinator
-      startBlock: 712385
+      startBlock: 7273
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
