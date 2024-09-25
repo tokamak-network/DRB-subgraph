@@ -8,9 +8,9 @@ dataSources:
     name: DRBCoordinator
     network: thanos
     source:
-      address: "0xA2aF457c38323d2f8C6199AEc6B6D82B35f9262E"
+      address: "0x95f96b01F8e0854DA39dF39cEc13f6426D814191"
       abi: DRBCoordinator
-      startBlock: 712385
+      startBlock: 714631
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

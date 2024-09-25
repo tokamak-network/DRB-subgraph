@@ -8,9 +8,9 @@ dataSources:
     name: DRBCoordinator
     network: titan-sepolia
     source:
-      address: "0xb8A9e7279b7f134736668bE3394CDAe5DFaD9e62"
+      address: "0x91b9E3cF2449eca45E7F4097f288582A46ffc38c"
       abi: DRBCoordinator
-      startBlock: 7273
+      startBlock: 10002
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
