@@ -1,0 +1,47 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Commit2Reveal2DRB
+    network: titan-sepolia
+    source:
+      address: "0x0EBD097CbD911E5A5DC401D7C91F71B47f0ee178"
+      abi: Commit2Reveal2DRB
+      startBlock: 16833
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Activated
+        - DeActivated
+        - EIP712DomainChanged
+        - L1FeeCalculationSet
+        - OwnershipTransferred
+        - RandomNumberGenerated
+        - RandomNumberRequested
+        - MerkleRootSubmitted
+      abis:
+        - name: Commit2Reveal2DRB
+          file: ./abis/Commit2Reveal2DRB.json
+      eventHandlers:
+        - event: Activated(address)
+          handler: handleActivated
+        - event: DeActivated(address)
+          handler: handleDeActivated
+        - event: EIP712DomainChanged()
+          handler: handleEIP712DomainChanged
+        - event: L1FeeCalculationSet(uint8,uint8)
+          handler: handleL1FeeCalculationSet
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RandomNumberGenerated(uint256,uint256)
+          handler: handleRandomNumberGenerated
+        - event: RandomNumberRequested(uint256,address[])
+          handler: handleRandomNumberRequested
+        - event: MerkleRootSubmitted(uint256,bytes32)
+          handler: handleMerkleRootSubmitted
+      file: ./src/commit-2-reveal-2-drb.ts

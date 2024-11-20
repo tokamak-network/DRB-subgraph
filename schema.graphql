@@ -1,0 +1,82 @@
+type Round @entity {
+  id: Bytes!
+  round: BigInt! # uint256
+  randomNumberRequested: RandomNumberRequested
+  merkleRootSubmitted: MerkleRootSubmitted
+  randomNumberGenerated: RandomNumberGenerated
+}
+
+type ActivatedOperators @entity(immutable: false) {
+  id: String!
+  operators: [Bytes!]! # address[]
+  operatorsCount: BigInt! # uint256
+}
+
+type Activated @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type DeActivated @entity(immutable: true) {
+  id: Bytes!
+  operator: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EIP712DomainChanged @entity(immutable: true) {
+  id: Bytes!
+
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type L1FeeCalculationSet @entity(immutable: true) {
+  id: Bytes!
+  mode: Int! # uint8
+  coefficient: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RandomNumberGenerated @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  randomNumber: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RandomNumberRequested @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  activatedOperators: [Bytes!]! # address[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type MerkleRootSubmitted @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  merkleRoot: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
