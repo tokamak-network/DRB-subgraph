@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { Address, BigInt } from "@graphprotocol/graph-ts"
 import { Activated } from "../generated/schema"
-import { Activated as ActivatedEvent } from "../generated/DRBCoordinator/DRBCoordinator"
-import { handleActivated } from "../src/drb-coordinator"
-import { createActivatedEvent } from "./drb-coordinator-utils"
+import { Activated as ActivatedEvent } from "../generated/Commit2Reveal2DRB/Commit2Reveal2DRB"
+import { handleActivated } from "../src/commit-2-reveal-2-drb"
+import { createActivatedEvent } from "./commit-2-reveal-2-drb-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0

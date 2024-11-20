@@ -1,8 +1,0 @@
-{
-  "sepolia": {
-    "DRBCoordinator": {
-      "address": "0x604f58e4b88fc76e042c6aa4e057c786700d37dc",
-      "startBlock": 6670874
-    }
-  }
-}

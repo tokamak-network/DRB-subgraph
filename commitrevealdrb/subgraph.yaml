@@ -1,47 +1,44 @@
-specVersion: 0.0.7
+specVersion: 1.0.0
 indexerHints:
   prune: auto
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: DRBCoordinator
-    network: titan
+    name: Commit2Reveal2DRB
+    network: optimism-sepolia
     source:
-      address: "0x78ACCa4E8269E6082D1C78B7386366feb7865fb4"
-      abi: DRBCoordinator
-      startBlock: 4233
+      address: "0xf786B746f536D616681E61c97cb62e4bE3bc4E39"
+      abi: Commit2Reveal2DRB
+      startBlock: 20131744
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Activated
-        - Commit
         - DeActivated
+        - EIP712DomainChanged
         - L1FeeCalculationSet
         - OwnershipTransferred
+        - RandomNumberGenerated
         - RandomNumberRequested
-        - Refund
-        - Reveal
       abis:
-        - name: DRBCoordinator
-          file: ./abis/DRBCoordinator.json
+        - name: Commit2Reveal2DRB
+          file: ./abis/Commit2Reveal2DRB.json
       eventHandlers:
         - event: Activated(address)
           handler: handleActivated
-        - event: Commit(address,uint256)
-          handler: handleCommit
         - event: DeActivated(address)
           handler: handleDeActivated
+        - event: EIP712DomainChanged()
+          handler: handleEIP712DomainChanged
         - event: L1FeeCalculationSet(uint8,uint8)
           handler: handleL1FeeCalculationSet
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
+        - event: RandomNumberGenerated(uint256,uint256)
+          handler: handleRandomNumberGenerated
         - event: RandomNumberRequested(uint256,address[])
           handler: handleRandomNumberRequested
-        - event: Refund(uint256)
-          handler: handleRefund
-        - event: Reveal(address,uint256)
-          handler: handleReveal
-      file: ./src/drb-coordinator.ts
+      file: ./src/commit-2-reveal-2-drb.ts

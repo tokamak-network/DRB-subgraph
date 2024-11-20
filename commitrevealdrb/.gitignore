@@ -6,7 +6,6 @@ generated/
 node_modules/
 jspm_packages/
 
-.env
 # Logs
 logs
 *.log

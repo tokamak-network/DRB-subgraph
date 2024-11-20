@@ -2,14 +2,13 @@ import { newMockEvent } from "matchstick-as"
 import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
   Activated,
-  Commit,
   DeActivated,
+  EIP712DomainChanged,
   L1FeeCalculationSet,
   OwnershipTransferred,
-  RandomNumberRequested,
-  Refund,
-  Reveal
-} from "../generated/DRBCoordinator/DRBCoordinator"
+  RandomNumberGenerated,
+  RandomNumberRequested
+} from "../generated/Commit2Reveal2DRB/Commit2Reveal2DRB"
 
 export function createActivatedEvent(operator: Address): Activated {
   let activatedEvent = changetype<Activated>(newMockEvent())
@@ -23,21 +22,6 @@ export function createActivatedEvent(operator: Address): Activated {
   return activatedEvent
 }
 
-export function createCommitEvent(operator: Address, round: BigInt): Commit {
-  let commitEvent = changetype<Commit>(newMockEvent())
-
-  commitEvent.parameters = new Array()
-
-  commitEvent.parameters.push(
-    new ethereum.EventParam("operator", ethereum.Value.fromAddress(operator))
-  )
-  commitEvent.parameters.push(
-    new ethereum.EventParam("round", ethereum.Value.fromUnsignedBigInt(round))
-  )
-
-  return commitEvent
-}
-
 export function createDeActivatedEvent(operator: Address): DeActivated {
   let deActivatedEvent = changetype<DeActivated>(newMockEvent())
 
@@ -48,6 +32,14 @@ export function createDeActivatedEvent(operator: Address): DeActivated {
   )
 
   return deActivatedEvent
+}
+
+export function createEIP712DomainChangedEvent(): EIP712DomainChanged {
+  let eip712DomainChangedEvent = changetype<EIP712DomainChanged>(newMockEvent())
+
+  eip712DomainChangedEvent.parameters = new Array()
+
+  return eip712DomainChangedEvent
 }
 
 export function createL1FeeCalculationSetEvent(
@@ -97,6 +89,29 @@ export function createOwnershipTransferredEvent(
   return ownershipTransferredEvent
 }
 
+export function createRandomNumberGeneratedEvent(
+  round: BigInt,
+  randomNumber: BigInt
+): RandomNumberGenerated {
+  let randomNumberGeneratedEvent = changetype<RandomNumberGenerated>(
+    newMockEvent()
+  )
+
+  randomNumberGeneratedEvent.parameters = new Array()
+
+  randomNumberGeneratedEvent.parameters.push(
+    new ethereum.EventParam("round", ethereum.Value.fromUnsignedBigInt(round))
+  )
+  randomNumberGeneratedEvent.parameters.push(
+    new ethereum.EventParam(
+      "randomNumber",
+      ethereum.Value.fromUnsignedBigInt(randomNumber)
+    )
+  )
+
+  return randomNumberGeneratedEvent
+}
+
 export function createRandomNumberRequestedEvent(
   round: BigInt,
   activatedOperators: Array<Address>
@@ -118,31 +133,4 @@ export function createRandomNumberRequestedEvent(
   )
 
   return randomNumberRequestedEvent
-}
-
-export function createRefundEvent(round: BigInt): Refund {
-  let refundEvent = changetype<Refund>(newMockEvent())
-
-  refundEvent.parameters = new Array()
-
-  refundEvent.parameters.push(
-    new ethereum.EventParam("round", ethereum.Value.fromUnsignedBigInt(round))
-  )
-
-  return refundEvent
-}
-
-export function createRevealEvent(operator: Address, round: BigInt): Reveal {
-  let revealEvent = changetype<Reveal>(newMockEvent())
-
-  revealEvent.parameters = new Array()
-
-  revealEvent.parameters.push(
-    new ethereum.EventParam("operator", ethereum.Value.fromAddress(operator))
-  )
-  revealEvent.parameters.push(
-    new ethereum.EventParam("round", ethereum.Value.fromUnsignedBigInt(round))
-  )
-
-  return revealEvent
 }
