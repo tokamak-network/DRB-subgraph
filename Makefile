@@ -23,10 +23,12 @@ buildgraph:; graph build
 
 deploy: create deplography
 
+NAME := commitreveal2
+
 create:
 	@graph create --node $(TITAN_SEPOLIA_NODE) $(NAME)
 
-deplography:
+deploy:
 	@graph deploy --node $(TITAN_SEPOLIA_NODE) --ipfs $(TITAN_SEPOLIA_IPFS) $(NAME)
 
 

@@ -1,5 +1,5 @@
 type Round @entity {
-  id: Bytes!
+  id: String!
   round: BigInt! # uint256
   randomNumberRequested: RandomNumberRequested
   merkleRootSubmitted: MerkleRootSubmitted

@@ -141,12 +141,8 @@ export function handleRandomNumberGenerated(
   entity.save();
 
   // Round
-  let round = Round.load(
-    Bytes.fromBigInt(event.params.round) as Bytes
-  ) as Round;
-  round.randomNumberGenerated = event.transaction.hash.concatI32(
-    event.logIndex.toI32()
-  );
+  let round = Round.load(event.params.round.toString()) as Round;
+  round.randomNumberGenerated = entity.id;
   round.save();
 }
 
@@ -166,12 +162,8 @@ export function handleMerkleRootSubmitted(
   entity.save();
 
   // Round
-  let round = Round.load(
-    Bytes.fromBigInt(event.params.round) as Bytes
-  ) as Round;
-  round.merkleRootSubmitted = event.transaction.hash.concatI32(
-    event.logIndex.toI32()
-  );
+  let round = Round.load(event.params.round.toString()) as Round;
+  round.merkleRootSubmitted = entity.id;
   round.save();
 }
 
@@ -197,10 +189,8 @@ export function handleRandomNumberRequested(
   entity.save();
 
   // Round
-  let round = new Round(Bytes.fromBigInt(event.params.round) as Bytes);
+  let round = new Round(event.params.round.toString());
   round.round = event.params.round;
-  round.randomNumberRequested = event.transaction.hash.concatI32(
-    event.logIndex.toI32()
-  );
+  round.randomNumberRequested = entity.id;
   round.save();
 }
