@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Commit2Reveal2DRB
-    network: titan-sepolia
+    network: thanos-stack
     source:
-      address: "0x16ed250f40Ee25b79a76215124dBf6d00Ca1A375"
+      address: "0x17b3E73833880AB6E8A632220968f9371cB533Bf"
       abi: Commit2Reveal2DRB
-      startBlock: 16833
+      startBlock: 178418
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

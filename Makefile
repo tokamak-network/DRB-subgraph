@@ -21,16 +21,17 @@ build: codegen buildgraph
 codegen:; graph codegen
 buildgraph:; graph build
 
-deploy: create deplography
 
 NAME := commitreveal2
 
 create:
-	@graph create --node $(TITAN_SEPOLIA_NODE) $(NAME)
+	@graph create --node $(THANOS_SEPOLIA_NODE) $(NAME)
 
 deploy:
-	@graph deploy --node $(TITAN_SEPOLIA_NODE) --ipfs $(TITAN_SEPOLIA_IPFS) $(NAME)
+	@graph deploy --node $(THANOS_SEPOLIA_NODE) $(NAME)
+
+# --ipfs $(THANOS_SEPOLIA_IPFS) 
 
 
 remove:
-	@graph remove --node $(TITAN_SEPOLIA_NODE) $(NAME)
+	@graph remove --node $(THANOS_SEPOLIA_NODE) $(NAME)
