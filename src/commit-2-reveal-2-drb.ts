@@ -138,6 +138,12 @@ export function handleRandomNumberGenerated(
   entity.blockTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
+  let participatedOperators: Array<Bytes> =
+    event.params.participatedOperators.map<Bytes>(
+      (address: Address) => address as Bytes
+    );
+  entity.participatedOperators = participatedOperators;
+
   entity.save();
 
   // Round

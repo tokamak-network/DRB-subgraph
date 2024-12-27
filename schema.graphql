@@ -61,6 +61,7 @@ type RandomNumberGenerated @entity(immutable: true) {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+  participatedOperators: [Bytes!]! # address[]
 }
 
 type RandomNumberRequested @entity(immutable: true) {

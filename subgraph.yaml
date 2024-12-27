@@ -8,9 +8,9 @@ dataSources:
     name: Commit2Reveal2DRB
     network: thanos-stack
     source:
-      address: "0x17b3E73833880AB6E8A632220968f9371cB533Bf"
+      address: "0xBB5D63b3a211Ec8bB37504e345523Ae4f9f0B3E2"
       abi: Commit2Reveal2DRB
-      startBlock: 178418
+      startBlock: 192768
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -38,7 +38,7 @@ dataSources:
           handler: handleL1FeeCalculationSet
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: RandomNumberGenerated(uint256,uint256)
+        - event: RandomNumberGenerated(uint256,uint256,address[])
           handler: handleRandomNumberGenerated
         - event: RandomNumberRequested(uint256,address[])
           handler: handleRandomNumberRequested
