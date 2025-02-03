@@ -22,12 +22,14 @@ codegen:; graph codegen
 buildgraph:; graph build
 
 
-NAME := commitreveal2
+NAME := commitreveal22
+
+deploy: create deploy-drb
 
 create:
 	@graph create --node $(THANOS_SEPOLIA_NODE) $(NAME)
 
-deploy:
+deploy-drb:
 	@graph deploy --node $(THANOS_SEPOLIA_NODE) $(NAME)
 
 # --ipfs $(THANOS_SEPOLIA_IPFS) 

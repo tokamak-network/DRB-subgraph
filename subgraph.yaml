@@ -8,9 +8,9 @@ dataSources:
     name: Commit2Reveal2DRB
     network: thanos-stack
     source:
-      address: "0xBB5D63b3a211Ec8bB37504e345523Ae4f9f0B3E2"
+      address: "0x31847Df3226B8F36975F3Dc35428160A0D4DD24c"
       abi: Commit2Reveal2DRB
-      startBlock: 192768
+      startBlock: 949512
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
