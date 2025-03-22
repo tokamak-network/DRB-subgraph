@@ -78,3 +78,5 @@ _(Illustrative image below)_
 
 - [The Graph Documentation](https://thegraph.com/docs/)
 - [Subgraph Studio](https://thegraph.com/studio/)
+
+### Skip 1,2 if you redeployed the contract
