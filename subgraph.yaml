@@ -1,0 +1,74 @@
+specVersion: 1.2.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CommitReveal2L1
+    network: sepolia
+    source:
+      address: "0x6a43B35FD749b96868c0Db6a0101e87d5dDf764c"
+      abi: CommitReveal2L1
+      startBlock: 7948311
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Activated
+        - CoSubmitted
+        - CvSubmitted
+        - DeActivated
+        - EIP712DomainChanged
+        - IsInProcess
+        - L1FeeCalculationSet
+        - MerkleRootSubmitted
+        - OwnershipHandoverCanceled
+        - OwnershipHandoverRequested
+        - OwnershipTransferred
+        - RandomNumberGenerated
+        - RandomNumberRequested
+        - RequestedToSubmitCo
+        - RequestedToSubmitCv
+        - RequestedToSubmitSFromIndexK
+        - SSubmitted
+      abis:
+        - name: CommitReveal2L1
+          file: ./abis/CommitReveal2L1.json
+      eventHandlers:
+        - event: Activated(address)
+          handler: handleActivated
+        - event: CoSubmitted(uint256,bytes32,uint256)
+          handler: handleCoSubmitted
+        - event: CvSubmitted(uint256,bytes32,uint256)
+          handler: handleCvSubmitted
+        - event: DeActivated(address)
+          handler: handleDeActivated
+        - event: EIP712DomainChanged()
+          handler: handleEIP712DomainChanged
+        - event: IsInProcess(uint256)
+          handler: handleIsInProcess
+        - event: L1FeeCalculationSet(uint8)
+          handler: handleL1FeeCalculationSet
+        - event: MerkleRootSubmitted(uint256,bytes32)
+          handler: handleMerkleRootSubmitted
+        - event: OwnershipHandoverCanceled(indexed address)
+          handler: handleOwnershipHandoverCanceled
+        - event: OwnershipHandoverRequested(indexed address)
+          handler: handleOwnershipHandoverRequested
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: RandomNumberGenerated(uint256,uint256,bool)
+          handler: handleRandomNumberGenerated
+        - event: RandomNumberRequested(uint256,uint256,address[])
+          handler: handleRandomNumberRequested
+        - event: RequestedToSubmitCo(uint256,uint256[])
+          handler: handleRequestedToSubmitCo
+        - event: RequestedToSubmitCv(uint256,uint256[])
+          handler: handleRequestedToSubmitCv
+        - event: RequestedToSubmitSFromIndexK(uint256,uint256)
+          handler: handleRequestedToSubmitSFromIndexK
+        - event: SSubmitted(uint256,bytes32,uint256)
+          handler: handleSSubmitted
+      file: ./src/commit-reveal-2-l-1.ts
