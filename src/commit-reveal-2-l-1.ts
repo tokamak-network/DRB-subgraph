@@ -4,17 +4,16 @@ import {
   CvSubmitted as CvSubmittedEvent,
   DeActivated as DeActivatedEvent,
   EIP712DomainChanged as EIP712DomainChangedEvent,
-  IsInProcess as IsInProcessEvent,
   L1FeeCalculationSet as L1FeeCalculationSetEvent,
   MerkleRootSubmitted as MerkleRootSubmittedEvent,
   OwnershipHandoverCanceled as OwnershipHandoverCanceledEvent,
   OwnershipHandoverRequested as OwnershipHandoverRequestedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
   RandomNumberGenerated as RandomNumberGeneratedEvent,
-  RandomNumberRequested as RandomNumberRequestedEvent,
   RequestedToSubmitCo as RequestedToSubmitCoEvent,
   RequestedToSubmitCv as RequestedToSubmitCvEvent,
   RequestedToSubmitSFromIndexK as RequestedToSubmitSFromIndexKEvent,
+  Round as RoundEvent,
   SSubmitted as SSubmittedEvent
 } from "../generated/CommitReveal2L1/CommitReveal2L1"
 import {
@@ -23,20 +22,18 @@ import {
   CvSubmitted,
   DeActivated,
   EIP712DomainChanged,
-  IsInProcess,
   L1FeeCalculationSet,
   MerkleRootSubmitted,
   OwnershipHandoverCanceled,
   OwnershipHandoverRequested,
   OwnershipTransferred,
   RandomNumberGenerated,
-  RandomNumberRequested,
   RequestedToSubmitCo,
   RequestedToSubmitCv,
   RequestedToSubmitSFromIndexK,
+  Round,
   SSubmitted
 } from "../generated/schema"
-import { Bytes } from "@graphprotocol/graph-ts"
 
 export function handleActivated(event: ActivatedEvent): void {
   let entity = new Activated(
@@ -55,7 +52,7 @@ export function handleCoSubmitted(event: CoSubmittedEvent): void {
   let entity = new CoSubmitted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.co = event.params.co
   entity.index = event.params.index
 
@@ -70,7 +67,7 @@ export function handleCvSubmitted(event: CvSubmittedEvent): void {
   let entity = new CvSubmitted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.cv = event.params.cv
   entity.index = event.params.index
 
@@ -108,19 +105,6 @@ export function handleEIP712DomainChanged(
   entity.save()
 }
 
-export function handleIsInProcess(event: IsInProcessEvent): void {
-  let entity = new IsInProcess(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.isInProcess = event.params.isInProcess
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
 export function handleL1FeeCalculationSet(
   event: L1FeeCalculationSetEvent
 ): void {
@@ -142,7 +126,7 @@ export function handleMerkleRootSubmitted(
   let entity = new MerkleRootSubmitted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.merkleRoot = event.params.merkleRoot
 
   entity.blockNumber = event.block.number
@@ -215,32 +199,13 @@ export function handleRandomNumberGenerated(
   entity.save()
 }
 
-export function handleRandomNumberRequested(
-  event: RandomNumberRequestedEvent
-): void {
-  let entity = new RandomNumberRequested(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.round = event.params.round
-  entity.timestamp = event.params.timestamp
-  entity.activatedOperators = changetype<Bytes[]>(
-    event.params.activatedOperators
-  )
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
 export function handleRequestedToSubmitCo(
   event: RequestedToSubmitCoEvent
 ): void {
   let entity = new RequestedToSubmitCo(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.indices = event.params.indices
 
   entity.blockNumber = event.block.number
@@ -256,7 +221,7 @@ export function handleRequestedToSubmitCv(
   let entity = new RequestedToSubmitCv(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.indices = event.params.indices
 
   entity.blockNumber = event.block.number
@@ -272,8 +237,22 @@ export function handleRequestedToSubmitSFromIndexK(
   let entity = new RequestedToSubmitSFromIndexK(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.index = event.params.index
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleRound(event: RoundEvent): void {
+  let entity = new Round(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.startTime = event.params.startTime
+  entity.state = event.params.state
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -286,7 +265,7 @@ export function handleSSubmitted(event: SSubmittedEvent): void {
   let entity = new SSubmitted(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.timestamp = event.params.timestamp
+  entity.startTime = event.params.startTime
   entity.s = event.params.s
   entity.index = event.params.index
 

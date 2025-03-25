@@ -1,8 +1,8 @@
 {
   "sepolia": {
     "CommitReveal2L1": {
-      "address": "0x6a43B35FD749b96868c0Db6a0101e87d5dDf764c",
-      "startBlock": 7948311
+      "address": "0xA87c2DE14Fc3F91e9E53854f3707b5e86cF7C3F7",
+      "startBlock": 7975899
     }
   }
 }

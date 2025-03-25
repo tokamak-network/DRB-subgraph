@@ -6,17 +6,16 @@ import {
   CvSubmitted,
   DeActivated,
   EIP712DomainChanged,
-  IsInProcess,
   L1FeeCalculationSet,
   MerkleRootSubmitted,
   OwnershipHandoverCanceled,
   OwnershipHandoverRequested,
   OwnershipTransferred,
   RandomNumberGenerated,
-  RandomNumberRequested,
   RequestedToSubmitCo,
   RequestedToSubmitCv,
   RequestedToSubmitSFromIndexK,
+  Round,
   SSubmitted
 } from "../generated/CommitReveal2L1/CommitReveal2L1"
 
@@ -33,7 +32,7 @@ export function createActivatedEvent(operator: Address): Activated {
 }
 
 export function createCoSubmittedEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   co: Bytes,
   index: BigInt
 ): CoSubmitted {
@@ -43,8 +42,8 @@ export function createCoSubmittedEvent(
 
   coSubmittedEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   coSubmittedEvent.parameters.push(
@@ -58,7 +57,7 @@ export function createCoSubmittedEvent(
 }
 
 export function createCvSubmittedEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   cv: Bytes,
   index: BigInt
 ): CvSubmitted {
@@ -68,8 +67,8 @@ export function createCvSubmittedEvent(
 
   cvSubmittedEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   cvSubmittedEvent.parameters.push(
@@ -102,21 +101,6 @@ export function createEIP712DomainChangedEvent(): EIP712DomainChanged {
   return eip712DomainChangedEvent
 }
 
-export function createIsInProcessEvent(isInProcess: BigInt): IsInProcess {
-  let isInProcessEvent = changetype<IsInProcess>(newMockEvent())
-
-  isInProcessEvent.parameters = new Array()
-
-  isInProcessEvent.parameters.push(
-    new ethereum.EventParam(
-      "isInProcess",
-      ethereum.Value.fromUnsignedBigInt(isInProcess)
-    )
-  )
-
-  return isInProcessEvent
-}
-
 export function createL1FeeCalculationSetEvent(
   coefficient: i32
 ): L1FeeCalculationSet {
@@ -135,7 +119,7 @@ export function createL1FeeCalculationSetEvent(
 }
 
 export function createMerkleRootSubmittedEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   merkleRoot: Bytes
 ): MerkleRootSubmitted {
   let merkleRootSubmittedEvent = changetype<MerkleRootSubmitted>(newMockEvent())
@@ -144,8 +128,8 @@ export function createMerkleRootSubmittedEvent(
 
   merkleRootSubmittedEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   merkleRootSubmittedEvent.parameters.push(
@@ -242,37 +226,8 @@ export function createRandomNumberGeneratedEvent(
   return randomNumberGeneratedEvent
 }
 
-export function createRandomNumberRequestedEvent(
-  round: BigInt,
-  timestamp: BigInt,
-  activatedOperators: Array<Address>
-): RandomNumberRequested {
-  let randomNumberRequestedEvent =
-    changetype<RandomNumberRequested>(newMockEvent())
-
-  randomNumberRequestedEvent.parameters = new Array()
-
-  randomNumberRequestedEvent.parameters.push(
-    new ethereum.EventParam("round", ethereum.Value.fromUnsignedBigInt(round))
-  )
-  randomNumberRequestedEvent.parameters.push(
-    new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
-    )
-  )
-  randomNumberRequestedEvent.parameters.push(
-    new ethereum.EventParam(
-      "activatedOperators",
-      ethereum.Value.fromAddressArray(activatedOperators)
-    )
-  )
-
-  return randomNumberRequestedEvent
-}
-
 export function createRequestedToSubmitCoEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   indices: Array<BigInt>
 ): RequestedToSubmitCo {
   let requestedToSubmitCoEvent = changetype<RequestedToSubmitCo>(newMockEvent())
@@ -281,8 +236,8 @@ export function createRequestedToSubmitCoEvent(
 
   requestedToSubmitCoEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   requestedToSubmitCoEvent.parameters.push(
@@ -296,7 +251,7 @@ export function createRequestedToSubmitCoEvent(
 }
 
 export function createRequestedToSubmitCvEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   indices: Array<BigInt>
 ): RequestedToSubmitCv {
   let requestedToSubmitCvEvent = changetype<RequestedToSubmitCv>(newMockEvent())
@@ -305,8 +260,8 @@ export function createRequestedToSubmitCvEvent(
 
   requestedToSubmitCvEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   requestedToSubmitCvEvent.parameters.push(
@@ -320,7 +275,7 @@ export function createRequestedToSubmitCvEvent(
 }
 
 export function createRequestedToSubmitSFromIndexKEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   index: BigInt
 ): RequestedToSubmitSFromIndexK {
   let requestedToSubmitSFromIndexKEvent =
@@ -330,8 +285,8 @@ export function createRequestedToSubmitSFromIndexKEvent(
 
   requestedToSubmitSFromIndexKEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   requestedToSubmitSFromIndexKEvent.parameters.push(
@@ -341,8 +296,26 @@ export function createRequestedToSubmitSFromIndexKEvent(
   return requestedToSubmitSFromIndexKEvent
 }
 
+export function createRoundEvent(startTime: BigInt, state: BigInt): Round {
+  let roundEvent = changetype<Round>(newMockEvent())
+
+  roundEvent.parameters = new Array()
+
+  roundEvent.parameters.push(
+    new ethereum.EventParam(
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
+    )
+  )
+  roundEvent.parameters.push(
+    new ethereum.EventParam("state", ethereum.Value.fromUnsignedBigInt(state))
+  )
+
+  return roundEvent
+}
+
 export function createSSubmittedEvent(
-  timestamp: BigInt,
+  startTime: BigInt,
   s: Bytes,
   index: BigInt
 ): SSubmitted {
@@ -352,8 +325,8 @@ export function createSSubmittedEvent(
 
   sSubmittedEvent.parameters.push(
     new ethereum.EventParam(
-      "timestamp",
-      ethereum.Value.fromUnsignedBigInt(timestamp)
+      "startTime",
+      ethereum.Value.fromUnsignedBigInt(startTime)
     )
   )
   sSubmittedEvent.parameters.push(

@@ -8,9 +8,9 @@ dataSources:
     name: CommitReveal2L1
     network: sepolia
     source:
-      address: "0x6a43B35FD749b96868c0Db6a0101e87d5dDf764c"
+      address: "0xbeEBBd0E8aC4535a9d5Eab88d845f1082d62Fc25"
       abi: CommitReveal2L1
-      startBlock: 7948311
+      startBlock: 7976000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -21,17 +21,16 @@ dataSources:
         - CvSubmitted
         - DeActivated
         - EIP712DomainChanged
-        - IsInProcess
         - L1FeeCalculationSet
         - MerkleRootSubmitted
         - OwnershipHandoverCanceled
         - OwnershipHandoverRequested
         - OwnershipTransferred
         - RandomNumberGenerated
-        - RandomNumberRequested
         - RequestedToSubmitCo
         - RequestedToSubmitCv
         - RequestedToSubmitSFromIndexK
+        - Round
         - SSubmitted
       abis:
         - name: CommitReveal2L1
@@ -47,8 +46,6 @@ dataSources:
           handler: handleDeActivated
         - event: EIP712DomainChanged()
           handler: handleEIP712DomainChanged
-        - event: IsInProcess(uint256)
-          handler: handleIsInProcess
         - event: L1FeeCalculationSet(uint8)
           handler: handleL1FeeCalculationSet
         - event: MerkleRootSubmitted(uint256,bytes32)
@@ -61,14 +58,14 @@ dataSources:
           handler: handleOwnershipTransferred
         - event: RandomNumberGenerated(uint256,uint256,bool)
           handler: handleRandomNumberGenerated
-        - event: RandomNumberRequested(uint256,uint256,address[])
-          handler: handleRandomNumberRequested
         - event: RequestedToSubmitCo(uint256,uint256[])
           handler: handleRequestedToSubmitCo
         - event: RequestedToSubmitCv(uint256,uint256[])
           handler: handleRequestedToSubmitCv
         - event: RequestedToSubmitSFromIndexK(uint256,uint256)
           handler: handleRequestedToSubmitSFromIndexK
+        - event: Round(uint256,uint256)
+          handler: handleRound
         - event: SSubmitted(uint256,bytes32,uint256)
           handler: handleSSubmitted
       file: ./src/commit-reveal-2-l-1.ts

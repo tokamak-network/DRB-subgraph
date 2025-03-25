@@ -124,7 +124,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -149,7 +149,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -192,19 +192,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "isInProcess",
-        "type": "uint256"
-      }
-    ],
-    "name": "IsInProcess",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint8",
         "name": "coefficient",
         "type": "uint8"
@@ -219,7 +206,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -308,32 +295,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "round",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "activatedOperators",
-        "type": "address[]"
-      }
-    ],
-    "name": "RandomNumberRequested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -352,7 +314,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -371,7 +333,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
         "type": "uint256"
       },
       {
@@ -390,7 +352,26 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "state",
+        "type": "uint256"
+      }
+    ],
+    "name": "Round",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTime",
         "type": "uint256"
       },
       {
