@@ -8,7 +8,7 @@ type Activated @entity(immutable: true) {
 
 type CoSubmitted @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   co: Bytes! # bytes32
   index: BigInt! # uint256
   blockNumber: BigInt!
@@ -18,7 +18,7 @@ type CoSubmitted @entity(immutable: true) {
 
 type CvSubmitted @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   cv: Bytes! # bytes32
   index: BigInt! # uint256
   blockNumber: BigInt!
@@ -42,6 +42,14 @@ type EIP712DomainChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type IsInProcess @entity(immutable: true) {
+  id: Bytes!
+  isInProcess: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type L1FeeCalculationSet @entity(immutable: true) {
   id: Bytes!
   coefficient: Int! # uint8
@@ -52,7 +60,7 @@ type L1FeeCalculationSet @entity(immutable: true) {
 
 type MerkleRootSubmitted @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   merkleRoot: Bytes! # bytes32
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -94,9 +102,19 @@ type RandomNumberGenerated @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type RandomNumberRequested @entity(immutable: true) {
+  id: Bytes!
+  round: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  activatedOperators: [Bytes!]! # address[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type RequestedToSubmitCo @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   indices: [BigInt!]! # uint256[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -105,7 +123,7 @@ type RequestedToSubmitCo @entity(immutable: true) {
 
 type RequestedToSubmitCv @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   indices: [BigInt!]! # uint256[]
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -114,17 +132,8 @@ type RequestedToSubmitCv @entity(immutable: true) {
 
 type RequestedToSubmitSFromIndexK @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   index: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Round @entity(immutable: true) {
-  id: Bytes!
-  startTime: BigInt! # uint256
-  state: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -132,10 +141,18 @@ type Round @entity(immutable: true) {
 
 type SSubmitted @entity(immutable: true) {
   id: Bytes!
-  startTime: BigInt! # uint256
+  timestamp: BigInt! # uint256
   s: Bytes! # bytes32
   index: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
+}
+
+type Round @entity {
+  id: String!
+  round: BigInt! # uint256
+  randomNumberRequested: RandomNumberRequested
+  merkleRootSubmitted: MerkleRootSubmitted
+  randomNumberGenerated: RandomNumberGenerated
 }
