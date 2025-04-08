@@ -1,957 +1,1603 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "activationThreshold",
-        "type": "uint256"
-      },
-      { "internalType": "uint256", "name": "flatFee", "type": "uint256" },
-      {
-        "internalType": "uint256",
-        "name": "maxActivatedOperators",
-        "type": "uint256"
-      },
-      { "internalType": "string", "name": "name", "type": "string" },
-      { "internalType": "string", "name": "version", "type": "string" },
-      {
-        "internalType": "uint256",
-        "name": "offChainSubmissionPeriod",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "requestOrSubmitOrFailDecisionPeriod",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "onChainSubmissionPeriod",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "offChainSubmissionPeriodPerOperator",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "onChainSubmissionPeriodPerOperator",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "constructor"
-  },
-  { "inputs": [], "name": "ActivatedOperatorsLimitReached", "type": "error" },
-  { "inputs": [], "name": "AlreadyActivated", "type": "error" },
-  { "inputs": [], "name": "AlreadyInitialized", "type": "error" },
-  { "inputs": [], "name": "AlreadyRefunded", "type": "error" },
-  { "inputs": [], "name": "AlreadyRequestedToSubmitCv", "type": "error" },
-  { "inputs": [], "name": "AlreadySubmittedMerkleRoot", "type": "error" },
-  { "inputs": [], "name": "AlreadySubmittedS", "type": "error" },
-  { "inputs": [], "name": "CoNotRequested", "type": "error" },
-  { "inputs": [], "name": "CvNotRequested", "type": "error" },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "index", "type": "uint256" }
-    ],
-    "name": "CvNotSubmitted",
-    "type": "error"
-  },
-  { "inputs": [], "name": "ETHTransferFailed", "type": "error" },
-  { "inputs": [], "name": "ExceedCallbackGasLimit", "type": "error" },
-  { "inputs": [], "name": "InProcess", "type": "error" },
-  { "inputs": [], "name": "InsufficientAmount", "type": "error" },
-  { "inputs": [], "name": "InvalidCo", "type": "error" },
-  {
-    "inputs": [
-      { "internalType": "uint8", "name": "coefficient", "type": "uint8" }
-    ],
-    "name": "InvalidL1FeeCoefficient",
-    "type": "error"
-  },
-  { "inputs": [], "name": "InvalidRevealOrder", "type": "error" },
-  { "inputs": [], "name": "InvalidRound", "type": "error" },
-  { "inputs": [], "name": "InvalidS", "type": "error" },
-  { "inputs": [], "name": "InvalidSecretLength", "type": "error" },
-  { "inputs": [], "name": "InvalidShortString", "type": "error" },
-  { "inputs": [], "name": "InvalidSignature", "type": "error" },
-  { "inputs": [], "name": "InvalidSignatureLength", "type": "error" },
-  { "inputs": [], "name": "InvalidSignatureS", "type": "error" },
-  { "inputs": [], "name": "LeaderLowDeposit", "type": "error" },
-  { "inputs": [], "name": "LessThanActivationThreshold", "type": "error" },
-  { "inputs": [], "name": "MerkleRootNotSubmitted", "type": "error" },
-  { "inputs": [], "name": "MerkleVerificationFailed", "type": "error" },
-  { "inputs": [], "name": "NewOwnerIsZeroAddress", "type": "error" },
-  { "inputs": [], "name": "NoHandoverRequest", "type": "error" },
-  { "inputs": [], "name": "NotActivatedOperator", "type": "error" },
-  { "inputs": [], "name": "NotConsumer", "type": "error" },
-  { "inputs": [], "name": "NotEnoughActivatedOperators", "type": "error" },
-  { "inputs": [], "name": "NotHalted", "type": "error" },
-  { "inputs": [], "name": "OnlyActivatedOperatorCanClaim", "type": "error" },
-  { "inputs": [], "name": "OperatorNotActivated", "type": "error" },
-  { "inputs": [], "name": "OwnerCannotActivate", "type": "error" },
-  { "inputs": [], "name": "RevealNotInDescendingOrder", "type": "error" },
-  { "inputs": [], "name": "SNotRequested", "type": "error" },
-  { "inputs": [], "name": "ShouldNotBeZero", "type": "error" },
-  {
-    "inputs": [{ "internalType": "string", "name": "str", "type": "string" }],
-    "name": "StringTooLong",
-    "type": "error"
-  },
-  { "inputs": [], "name": "TooEarly", "type": "error" },
-  { "inputs": [], "name": "TooLate", "type": "error" },
-  { "inputs": [], "name": "TransferFailed", "type": "error" },
-  { "inputs": [], "name": "Unauthorized", "type": "error" },
-  { "inputs": [], "name": "ZeroLength", "type": "error" },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "Activated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "co",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "CoSubmitted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "cv",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "CvSubmitted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "operator",
-        "type": "address"
-      }
-    ],
-    "name": "DeActivated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [],
-    "name": "EIP712DomainChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint8",
-        "name": "coefficient",
-        "type": "uint8"
-      }
-    ],
-    "name": "L1FeeCalculationSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "merkleRoot",
-        "type": "bytes32"
-      }
-    ],
-    "name": "MerkleRootSubmitted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "pendingOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipHandoverCanceled",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "pendingOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipHandoverRequested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "oldOwner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "round",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "randomNumber",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "callbackSuccess",
-        "type": "bool"
-      }
-    ],
-    "name": "RandomNumberGenerated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "indices",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "RequestedToSubmitCo",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "indices",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "RequestedToSubmitCv",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "RequestedToSubmitSFromIndexK",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "state",
-        "type": "uint256"
-      }
-    ],
-    "name": "Round",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "s",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "SSubmitted",
-    "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "activate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "cancelOwnershipHandover",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "claimSlashReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "pendingOwner", "type": "address" }
-    ],
-    "name": "completeOwnershipHandover",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "deactivate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "deposit",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "depositAndActivate",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "eip712Domain",
-    "outputs": [
-      { "internalType": "bytes1", "name": "fields", "type": "bytes1" },
-      { "internalType": "string", "name": "name", "type": "string" },
-      { "internalType": "string", "name": "version", "type": "string" },
-      { "internalType": "uint256", "name": "chainId", "type": "uint256" },
-      {
-        "internalType": "address",
-        "name": "verifyingContract",
-        "type": "address"
-      },
-      { "internalType": "bytes32", "name": "salt", "type": "bytes32" },
-      { "internalType": "uint256[]", "name": "extensions", "type": "uint256[]" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "callbackGasLimit",
-        "type": "uint256"
-      },
-      { "internalType": "uint256", "name": "gasPrice", "type": "uint256" },
-      { "internalType": "uint256", "name": "numOfOperators", "type": "uint256" }
-    ],
-    "name": "estimateRequestPrice",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "callbackGasLimit",
-        "type": "uint256"
-      },
-      { "internalType": "uint256", "name": "gasPrice", "type": "uint256" }
-    ],
-    "name": "estimateRequestPrice",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToRequestSOrGenerateRandomNumber",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToRequestSubmitCvOrSubmitMerkleRoot",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToSubmitCo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToSubmitCv",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToSubmitMerkleRootAfterDispute",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "failToSubmitS",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32[]", "name": "secrets", "type": "bytes32[]" },
-      { "internalType": "uint8[]", "name": "vs", "type": "uint8[]" },
-      { "internalType": "bytes32[]", "name": "rs", "type": "bytes32[]" },
-      { "internalType": "bytes32[]", "name": "ss", "type": "bytes32[]" },
-      {
-        "internalType": "uint256[]",
-        "name": "revealOrders",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "generateRandomNumber",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getActivatedOperators",
-    "outputs": [
-      { "internalType": "address[]", "name": "", "type": "address[]" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getActivatedOperatorsLength",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" }
-    ],
-    "name": "getDepositPlusSlashReward",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      { "internalType": "address", "name": "result", "type": "address" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "pendingOwner", "type": "address" }
-    ],
-    "name": "ownershipHandoverExpiresAt",
-    "outputs": [
-      { "internalType": "uint256", "name": "result", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "round", "type": "uint256" }
-    ],
-    "name": "refund",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "renounceOwnership",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "requestOwnershipHandover",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint32", "name": "callbackGasLimit", "type": "uint32" }
-    ],
-    "name": "requestRandomNumber",
-    "outputs": [
-      { "internalType": "uint256", "name": "newRound", "type": "uint256" }
-    ],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256[]", "name": "indices", "type": "uint256[]" },
-      { "internalType": "bytes32[]", "name": "cvs", "type": "bytes32[]" },
-      { "internalType": "uint8[]", "name": "vs", "type": "uint8[]" },
-      { "internalType": "bytes32[]", "name": "rs", "type": "bytes32[]" },
-      { "internalType": "bytes32[]", "name": "ss", "type": "bytes32[]" }
-    ],
-    "name": "requestToSubmitCo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256[]", "name": "indices", "type": "uint256[]" }
-    ],
-    "name": "requestToSubmitCv",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32[]", "name": "cos", "type": "bytes32[]" },
-      { "internalType": "bytes32[]", "name": "secrets", "type": "bytes32[]" },
-      {
-        "components": [
-          { "internalType": "uint8", "name": "v", "type": "uint8" },
-          { "internalType": "bytes32", "name": "r", "type": "bytes32" },
-          { "internalType": "bytes32", "name": "s", "type": "bytes32" }
-        ],
-        "internalType": "struct Dispute.Signature[]",
-        "name": "signatures",
-        "type": "tuple[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "revealOrders",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "requestToSubmitS",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "resume",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" }
-    ],
-    "name": "s_activatedOperatorIndex1Based",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_activationThreshold",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_currentRound",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "s_cvs",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "operator", "type": "address" }
-    ],
-    "name": "s_depositAmount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_flatFee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_isInProcess",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
-    ],
-    "name": "s_isSubmittedMerkleRoot",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_l1FeeCoefficient",
-    "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_maxActivatedOperators",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_merkleRoot",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_merkleRootSubmittedTimestamp",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_previousSSubmitTimestamp",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_requestCount",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "round", "type": "uint256" }
-    ],
-    "name": "s_requestInfo",
-    "outputs": [
-      { "internalType": "address", "name": "consumer", "type": "address" },
-      { "internalType": "uint256", "name": "startTime", "type": "uint256" },
-      { "internalType": "uint256", "name": "cost", "type": "uint256" },
-      {
-        "internalType": "uint256",
-        "name": "callbackGasLimit",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" }
-    ],
-    "name": "s_requestToSubmitCoBitmap",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "s_requestedToSubmitCoIndices",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_requestedToSubmitCoTimestamp",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "s_requestedToSubmitCvIndices",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_requestedToSubmitCvTimestamp",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_requestedToSubmitSFromIndexK",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "name": "s_revealOrders",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint248", "name": "wordPos", "type": "uint248" }
-    ],
-    "name": "s_roundBitmap",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "s_slashRewardPerOperator",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "name": "s_slashRewardPerOperatorPaid",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint256", "name": "timestamp", "type": "uint256" },
-      { "internalType": "uint256", "name": "", "type": "uint256" }
-    ],
-    "name": "s_ss",
-    "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "uint8", "name": "coefficient", "type": "uint8" }
-    ],
-    "name": "setL1FeeCoefficient",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "bytes32", "name": "co", "type": "bytes32" }],
-    "name": "submitCo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "bytes32", "name": "cv", "type": "bytes32" }],
-    "name": "submitCv",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "merkleRoot", "type": "bytes32" }
-    ],
-    "name": "submitMerkleRoot",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "bytes32", "name": "merkleRoot", "type": "bytes32" }
-    ],
-    "name": "submitMerkleRootAfterDispute",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [{ "internalType": "bytes32", "name": "s", "type": "bytes32" }],
-    "name": "submitS",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "withdraw",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
+      "type": "constructor",
+      "inputs": [
+          {
+              "name": "activationThreshold",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "flatFee",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "maxActivatedOperators",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "name",
+              "type": "string",
+              "internalType": "string"
+          },
+          {
+              "name": "version",
+              "type": "string",
+              "internalType": "string"
+          },
+          {
+              "name": "offChainSubmissionPeriod",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "requestOrSubmitOrFailDecisionPeriod",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "onChainSubmissionPeriod",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "offChainSubmissionPeriodPerOperator",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "onChainSubmissionPeriodPerOperator",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "activate",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "cancelOwnershipHandover",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "claimSlashReward",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "completeOwnershipHandover",
+      "inputs": [
+          {
+              "name": "pendingOwner",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "deactivate",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "deposit",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "depositAndActivate",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "eip712Domain",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "fields",
+              "type": "bytes1",
+              "internalType": "bytes1"
+          },
+          {
+              "name": "name",
+              "type": "string",
+              "internalType": "string"
+          },
+          {
+              "name": "version",
+              "type": "string",
+              "internalType": "string"
+          },
+          {
+              "name": "chainId",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "verifyingContract",
+              "type": "address",
+              "internalType": "address"
+          },
+          {
+              "name": "salt",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          },
+          {
+              "name": "extensions",
+              "type": "uint256[]",
+              "internalType": "uint256[]"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "estimateRequestPrice",
+      "inputs": [
+          {
+              "name": "callbackGasLimit",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "gasPrice",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "numOfOperators",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "estimateRequestPrice",
+      "inputs": [
+          {
+              "name": "callbackGasLimit",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "gasPrice",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "failToRequestSOrGenerateRandomNumber",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "failToRequestSubmitCvOrSubmitMerkleRoot",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "failToSubmitCo",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "failToSubmitCv",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "failToSubmitMerkleRootAfterDispute",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "failToSubmitS",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "generateRandomNumber",
+      "inputs": [
+          {
+              "name": "secrets",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "vs",
+              "type": "uint8[]",
+              "internalType": "uint8[]"
+          },
+          {
+              "name": "rs",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "ss",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "revealOrders",
+              "type": "uint256[]",
+              "internalType": "uint256[]"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "getActivatedOperators",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "address[]",
+              "internalType": "address[]"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "getActivatedOperatorsLength",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "getCurStartTime",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "getDepositPlusSlashReward",
+      "inputs": [
+          {
+              "name": "operator",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "owner",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "result",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "ownershipHandoverExpiresAt",
+      "inputs": [
+          {
+              "name": "pendingOwner",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "result",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "refund",
+      "inputs": [
+          {
+              "name": "round",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "renounceOwnership",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "requestOwnershipHandover",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "requestRandomNumber",
+      "inputs": [
+          {
+              "name": "callbackGasLimit",
+              "type": "uint32",
+              "internalType": "uint32"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "newRound",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "requestToSubmitCo",
+      "inputs": [
+          {
+              "name": "indices",
+              "type": "uint256[]",
+              "internalType": "uint256[]"
+          },
+          {
+              "name": "cvs",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "vs",
+              "type": "uint8[]",
+              "internalType": "uint8[]"
+          },
+          {
+              "name": "rs",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "ss",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "requestToSubmitCv",
+      "inputs": [
+          {
+              "name": "indices",
+              "type": "uint256[]",
+              "internalType": "uint256[]"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "requestToSubmitS",
+      "inputs": [
+          {
+              "name": "cos",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "secrets",
+              "type": "bytes32[]",
+              "internalType": "bytes32[]"
+          },
+          {
+              "name": "signatures",
+              "type": "tuple[]",
+              "internalType": "struct Dispute.Signature[]",
+              "components": [
+                  {
+                      "name": "v",
+                      "type": "uint8",
+                      "internalType": "uint8"
+                  },
+                  {
+                      "name": "r",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                  },
+                  {
+                      "name": "s",
+                      "type": "bytes32",
+                      "internalType": "bytes32"
+                  }
+              ]
+          },
+          {
+              "name": "revealOrders",
+              "type": "uint256[]",
+              "internalType": "uint256[]"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "resume",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "s_activatedOperatorIndex1Based",
+      "inputs": [
+          {
+              "name": "operator",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_activationThreshold",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_currentRound",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_cvs",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_depositAmount",
+      "inputs": [
+          {
+              "name": "operator",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_flatFee",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_isInProcess",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_isSubmittedMerkleRoot",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "bool",
+              "internalType": "bool"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_l1FeeCoefficient",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint8",
+              "internalType": "uint8"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_maxActivatedOperators",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_merkleRoot",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_merkleRootSubmittedTimestamp",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_previousSSubmitTimestamp",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestCount",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestInfo",
+      "inputs": [
+          {
+              "name": "round",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "consumer",
+              "type": "address",
+              "internalType": "address"
+          },
+          {
+              "name": "startTime",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "cost",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "callbackGasLimit",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestToSubmitCoBitmap",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestedToSubmitCoIndices",
+      "inputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestedToSubmitCoTimestamp",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestedToSubmitCvIndices",
+      "inputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestedToSubmitCvTimestamp",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_requestedToSubmitSFromIndexK",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_revealOrders",
+      "inputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_roundBitmap",
+      "inputs": [
+          {
+              "name": "wordPos",
+              "type": "uint248",
+              "internalType": "uint248"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_slashRewardPerOperator",
+      "inputs": [],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_slashRewardPerOperatorPaid",
+      "inputs": [
+          {
+              "name": "",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "s_ss",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+          },
+          {
+              "name": "",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ],
+      "outputs": [
+          {
+              "name": "",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "stateMutability": "view"
+  },
+  {
+      "type": "function",
+      "name": "setL1FeeCoefficient",
+      "inputs": [
+          {
+              "name": "coefficient",
+              "type": "uint8",
+              "internalType": "uint8"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "submitCo",
+      "inputs": [
+          {
+              "name": "co",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "submitCv",
+      "inputs": [
+          {
+              "name": "cv",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "submitMerkleRoot",
+      "inputs": [
+          {
+              "name": "merkleRoot",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "submitMerkleRootAfterDispute",
+      "inputs": [
+          {
+              "name": "merkleRoot",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "submitS",
+      "inputs": [
+          {
+              "name": "s",
+              "type": "bytes32",
+              "internalType": "bytes32"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "function",
+      "name": "transferOwnership",
+      "inputs": [
+          {
+              "name": "newOwner",
+              "type": "address",
+              "internalType": "address"
+          }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+  },
+  {
+      "type": "function",
+      "name": "withdraw",
+      "inputs": [],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+  },
+  {
+      "type": "event",
+      "name": "Activated",
+      "inputs": [
+          {
+              "name": "operator",
+              "type": "address",
+              "indexed": false,
+              "internalType": "address"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "CoSubmitted",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "co",
+              "type": "bytes32",
+              "indexed": false,
+              "internalType": "bytes32"
+          },
+          {
+              "name": "index",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "CvSubmitted",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "cv",
+              "type": "bytes32",
+              "indexed": false,
+              "internalType": "bytes32"
+          },
+          {
+              "name": "index",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "DeActivated",
+      "inputs": [
+          {
+              "name": "operator",
+              "type": "address",
+              "indexed": false,
+              "internalType": "address"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "EIP712DomainChanged",
+      "inputs": [],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "IsInProcess",
+      "inputs": [
+          {
+              "name": "isInProcess",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "L1FeeCalculationSet",
+      "inputs": [
+          {
+              "name": "coefficient",
+              "type": "uint8",
+              "indexed": false,
+              "internalType": "uint8"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "MerkleRootSubmitted",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "merkleRoot",
+              "type": "bytes32",
+              "indexed": false,
+              "internalType": "bytes32"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "OwnershipHandoverCanceled",
+      "inputs": [
+          {
+              "name": "pendingOwner",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "OwnershipHandoverRequested",
+      "inputs": [
+          {
+              "name": "pendingOwner",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "OwnershipTransferred",
+      "inputs": [
+          {
+              "name": "oldOwner",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+          },
+          {
+              "name": "newOwner",
+              "type": "address",
+              "indexed": true,
+              "internalType": "address"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "RandomNumberGenerated",
+      "inputs": [
+          {
+              "name": "round",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "randomNumber",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "callbackSuccess",
+              "type": "bool",
+              "indexed": false,
+              "internalType": "bool"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "RandomNumberRequested",
+      "inputs": [
+          {
+              "name": "round",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "activatedOperators",
+              "type": "address[]",
+              "indexed": false,
+              "internalType": "address[]"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "RequestedToSubmitCo",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "indices",
+              "type": "uint256[]",
+              "indexed": false,
+              "internalType": "uint256[]"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "RequestedToSubmitCv",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "indices",
+              "type": "uint256[]",
+              "indexed": false,
+              "internalType": "uint256[]"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "RequestedToSubmitSFromIndexK",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "index",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "event",
+      "name": "SSubmitted",
+      "inputs": [
+          {
+              "name": "timestamp",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          },
+          {
+              "name": "s",
+              "type": "bytes32",
+              "indexed": false,
+              "internalType": "bytes32"
+          },
+          {
+              "name": "index",
+              "type": "uint256",
+              "indexed": false,
+              "internalType": "uint256"
+          }
+      ],
+      "anonymous": false
+  },
+  {
+      "type": "error",
+      "name": "ActivatedOperatorsLimitReached",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadyActivated",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadyInitialized",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadyRefunded",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadyRequestedToSubmitCv",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadySubmittedMerkleRoot",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "AlreadySubmittedS",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "CoNotRequested",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "CvNotRequested",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "CvNotSubmitted",
+      "inputs": [
+          {
+              "name": "index",
+              "type": "uint256",
+              "internalType": "uint256"
+          }
+      ]
+  },
+  {
+      "type": "error",
+      "name": "ETHTransferFailed",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "ExceedCallbackGasLimit",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InProcess",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InsufficientAmount",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidCo",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidL1FeeCoefficient",
+      "inputs": [
+          {
+              "name": "coefficient",
+              "type": "uint8",
+              "internalType": "uint8"
+          }
+      ]
+  },
+  {
+      "type": "error",
+      "name": "InvalidRevealOrder",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidRound",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidS",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidSecretLength",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidShortString",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidSignature",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidSignatureLength",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "InvalidSignatureS",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "LeaderLowDeposit",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "LessThanActivationThreshold",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "MerkleRootNotSubmitted",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "MerkleVerificationFailed",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NewOwnerIsZeroAddress",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NoHandoverRequest",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NotActivatedOperator",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NotConsumer",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NotEnoughActivatedOperators",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "NotHalted",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "OnlyActivatedOperatorCanClaim",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "OperatorNotActivated",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "OwnerCannotActivate",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "RevealNotInDescendingOrder",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "SNotRequested",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "ShouldNotBeZero",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "StringTooLong",
+      "inputs": [
+          {
+              "name": "str",
+              "type": "string",
+              "internalType": "string"
+          }
+      ]
+  },
+  {
+      "type": "error",
+      "name": "TooEarly",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "TooLate",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "TransferFailed",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "Unauthorized",
+      "inputs": []
+  },
+  {
+      "type": "error",
+      "name": "ZeroLength",
+      "inputs": []
   }
 ]
